@@ -1,0 +1,26 @@
+# This is a sample build configuration for Docker.
+# Check our guides at https://confluence.atlassian.com/x/O1toN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: docker:latest
+
+options:
+  docker: true
+
+pipelines:
+  default:
+    - step:
+        name: Install required packages
+        script: 
+          - apk update && apk add --no-cache python3-dev py3-pip gcc git curl build-base 
+            autoconf automake py3-cryptography linux-headers
+            musl-dev libffi-dev openssl-dev openssh
+          - docker info
+          - python3 --version
+          - python3 -m pip install ansible yamllint ansible-lint pytest testinfra molecule[docker]
+          - ansible --version
+          - molecule --version
+          - cd nginx-role
+          - molecule test
+        

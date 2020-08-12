@@ -32,10 +32,7 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Install all molecule dependencies
       run: pip3 install molecule[docker] yamllint ansible-lint testinfra pytest
-      
-    - name: Create init role
-      run: molecule init role --verifier-name testinfra -d docker nginx-role
-      
+
     - name: Molecule test
       run: |
         cd nginx-role

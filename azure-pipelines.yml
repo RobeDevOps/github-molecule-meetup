@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  displayName: Use Python 3.x
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+    architecture: 'x64'
+- task: Bash@3
+  displayName: Install molecule and dependencies
+  inputs:
+    targetType: 'inline'
+    script: 'pip3 install molecule docker yamllint ansible-lint pytest ansible testinfra'
+- task: Bash@3
+  displayName: Run molecule test
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd nginx-role
+      molecule test
